@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $owners = \App\Http\Resources\OwnerResource::collection(\App\Models\Owner::all());
+
     return view('welcome')->with('owners', $owners);
 });
 

@@ -22,13 +22,11 @@ class OwnerControllerTest extends AbstractResourceControllerTestBase
 
     public function test_index()
     {
-
         $response = $this->get(route('owner.index'))->assertOk();
 
         $owners = $response->json('data');
 
         $this->assertCount(self::OWNER_COUNT, $owners);
-
     }
 
     public function test_create()
