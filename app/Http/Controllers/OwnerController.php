@@ -22,7 +22,7 @@ class OwnerController extends Controller
      */
     public function create()
     {
-        //
+        return view('owners.create');
     }
 
     /**

@@ -24,7 +24,7 @@ class StoreOwnerRequest extends FormRequest
         return [
             'forename' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'email' => 'required|email:rfc,dns|max:255',
+            'email' => 'required|email:rfc,dns|unique:owners|max:255',
             'phone' => 'nullable|string|max:255',
         ];
     }

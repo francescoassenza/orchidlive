@@ -8,6 +8,7 @@ import axios from 'axios';
 window.axios = axios;
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('[name="_token"]').value;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
