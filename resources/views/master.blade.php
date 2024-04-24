@@ -16,7 +16,9 @@
 <body class="antialiased">
 <div class="min-h-screen bg-center bg-gray-100 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto p-6 lg:p-8 bg-white">
-        @yield('content')
+        <div id="app">
+            @yield('content')
+        </div>
     </div>
 </div>
 </body>
