@@ -65,5 +65,7 @@ class OwnerController extends Controller
     public function destroy(Owner $owner)
     {
         $owner->delete();
+
+        return redirect('/')->with(['owner_deleted' => $owner->email]);
     }
 }
