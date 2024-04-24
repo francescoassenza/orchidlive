@@ -31,7 +31,7 @@ class OwnerControllerTest extends AbstractResourceControllerTestBase
 
     public function test_create()
     {
-        $this->markTestIncomplete();
+        $this->get(route('owner.create'))->assertOk();
     }
 
     public function test_store()
@@ -49,6 +49,44 @@ class OwnerControllerTest extends AbstractResourceControllerTestBase
         $this->post(route('owner.store'), $testUser)->assertOk();
         $this->assertCount(self::OWNER_COUNT + 1, Owner::all());
         $this->assertDatabaseHas('owners', $testUser);
+    }
+
+    public static function invalidUserDataProvider()
+    {
+        return [
+            [
+                [
+                    'forename' => 'Test',
+                    'surname' => 'User',
+                    'email' => 'test',
+                    'phone' => '0123456789',
+                ],
+                [
+                    'email',
+                ],
+            ],
+            [
+                [
+                    'forename' => '',
+                    'surname' => 'User',
+                    'email' => 'test',
+                    'phone' => '0123456789',
+                ],
+                [
+                    'forename', 'email',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidUserDataProvider
+     */
+    public function test_store_with_validation_errors($testUser, $errors)
+    {
+        $this->post(route('owner.store'), $testUser)->assertInvalid($errors);
+
+        $this->assertCount(self::OWNER_COUNT, Owner::all());
     }
 
     public function test_show()
@@ -86,8 +124,16 @@ class OwnerControllerTest extends AbstractResourceControllerTestBase
     {
         $owner = Owner::firstOrFail();
 
-        $this->delete(route('owner.destroy', $owner->id))->assertOk();
+        $ownerCarIds = $owner->cars->pluck(['id']);
+
+        $this->delete(route('owner.destroy', $owner->id))
+            ->assertRedirect($uri = '/')
+            ->assertSessionHas('owner_deleted', $owner->email);
 
         $this->assertNull(Owner::find($owner->id));
+
+        foreach ($ownerCarIds as $carId) {
+            $this->assertNull(Car::find($carId));
+        }
     }
 }
